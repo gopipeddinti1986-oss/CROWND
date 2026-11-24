@@ -17,9 +17,24 @@ try {
   process.exit(1);
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function normalizeUrl(url) {
+  if (!url) return "";
+  let trimmed = url.trim().replace(/^['"]|['"]$/g, "");
+  if (trimmed.startsWith("https:https://")) {
+    trimmed = trimmed.replace("https:https://", "https://");
+  } else if (trimmed.startsWith("http:http://")) {
+    trimmed = trimmed.replace("http:http://", "http://");
+  }
+  trimmed = trimmed.replace(/\/rest\/v1\/?$/, "");
+  trimmed = trimmed.replace(/\/+$/, "");
+  return trimmed;
+}
+
+const supabaseUrl = normalizeUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
+const anonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "")
+  .trim()
+  .replace(/^['"]|['"]$/g, "");
+const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim().replace(/^['"]|['"]$/g, "");
 
 const envCheck = {
   hasUrl: Boolean(supabaseUrl),
@@ -130,9 +145,7 @@ async function testConnection() {
 
       let anySuccess = false;
       for (const table of tablesToCheck) {
-        const { error, count } = await adminClient
-          .from(table)
-          .select("*", { count: "exact", head: true });
+        const { error, count } = await adminClient.from(table).select("id").limit(1);
         if (error) {
           results.tablesStatus[table] = {
             exists: false,

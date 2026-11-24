@@ -19,4 +19,12 @@ describe("Supabase Environment Utilities", () => {
     expect(normalizeUrl("")).toBe("");
     expect(normalizeUrl(undefined)).toBe("");
   });
+
+  it("strips trailing /rest/v1 and trailing slashes", () => {
+    expect(normalizeUrl("https://example.supabase.co/rest/v1/")).toBe(
+      "https://example.supabase.co"
+    );
+    expect(normalizeUrl("https://example.supabase.co/rest/v1")).toBe("https://example.supabase.co");
+    expect(normalizeUrl("https://example.supabase.co/")).toBe("https://example.supabase.co");
+  });
 });

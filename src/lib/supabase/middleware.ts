@@ -38,8 +38,13 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Protect /dashboard and /admin routes
-  if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
+  // Protect /dashboard, /onboarding, and /admin routes
+  if (
+    !user &&
+    (pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/onboarding") ||
+      pathname.startsWith("/admin"))
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirect", pathname);

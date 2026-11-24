@@ -203,7 +203,12 @@ export async function resetPasswordAction(formData: FormData): Promise<AuthRespo
 
 export async function getAuthenticatedUser(): Promise<{
   user: { id: string; email: string } | null;
-  profile: { role: UserRole; full_name: string | null; is_verified: boolean } | null;
+  profile: {
+    role: UserRole;
+    full_name: string | null;
+    is_verified: boolean;
+    onboarding_completed: boolean;
+  } | null;
 }> {
   const supabase = await createClient();
   const {
@@ -217,7 +222,7 @@ export async function getAuthenticatedUser(): Promise<{
   // Retrieve validated role and status from database, not client token
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name, is_verified")
+    .select("role, full_name, is_verified, onboarding_completed")
     .eq("id", user.id)
     .single();
 
@@ -225,6 +230,7 @@ export async function getAuthenticatedUser(): Promise<{
     role: UserRole;
     full_name: string | null;
     is_verified: boolean;
+    onboarding_completed: boolean;
   } | null;
 
   return {
@@ -233,6 +239,7 @@ export async function getAuthenticatedUser(): Promise<{
       role: (user.user_metadata?.role as UserRole) || "creator",
       full_name: user.user_metadata?.full_name || null,
       is_verified: false,
+      onboarding_completed: false,
     },
   };
 }

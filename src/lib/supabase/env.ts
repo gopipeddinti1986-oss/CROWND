@@ -11,6 +11,10 @@ export function normalizeUrl(url?: string): string {
   } else if (trimmed.startsWith("http:http://")) {
     trimmed = trimmed.replace("http:http://", "http://");
   }
+  // Strip trailing /rest/v1 or /rest/v1/ if pasted from Supabase API settings
+  trimmed = trimmed.replace(/\/rest\/v1\/?$/, "");
+  // Strip trailing slash
+  trimmed = trimmed.replace(/\/+$/, "");
   return trimmed;
 }
 
