@@ -12,30 +12,34 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 ## 2. Current Status
 
 - **Current Stage:** Stage A: Foundation & Core Platform
-- **Phase:** Task 1 & 2 — Scaffolding, Tooling & Design System Architecture
-- **Latest Commit:** None (Initial scaffold in progress)
+- **Phase:** Task 3 — Design System & Layout Complete; Preparing Supabase Foundation
+- **Latest Commit:** ee98fa7 (chore: scaffold Next.js application with TypeScript, Tailwind CSS and test tooling)
 
 ---
 
 ## 3. Task Tracker
 
-| Task / Gate                   | Scope                                                                | Status         | Details                                                                      |
-| ----------------------------- | -------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------- |
-| **Git & Repo Inspection**     | Verify origin, branch, history                                       | ✅ Completed   | Clean repo, origin set to https://github.com/gopipeddinti1986-oss/CROWND.git |
-| **Project Scaffolding**       | Next.js 15, TS strict, Tailwind, Prettier, ESLint                    | 🔄 In Progress | Dependencies installing; configs created                                     |
-| **Design System**             | Tokens, themes (light/dark), components, typography                  | 🔄 In Progress | Tokens specified; palette & fonts structured                                 |
-| **Supabase Foundation**       | Client configs, schema, migrations, RLS, seed                        | ⏳ Queued      | Database schema and migrations defined                                       |
-| **Supabase Env Setup**        | .env.example, .gitignore, guidance                                   | ✅ Completed   | Template created; awaiting user local .env.local values                      |
-| **Authentication Foundation** | Sign up, sign in, password reset, protected routes, roles            | ⏳ Queued      | Client/server sessions and role-aware layout                                 |
-| **Public Marketing Website**  | Home, How it works, Creators, Campaigns, Pricing, FAQ, Guides, Legal | ⏳ Queued      | Editorial, clean, informative content without lorem ipsum                    |
-| **Testing & Quality Gates**   | Vitest, TypeScript, Lint, Axe a11y, responsive                       | ⏳ Queued      | Frameworks configured; tests in implementation                               |
+| Task / Gate                   | Scope                                                                | Status       | Details                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+| **Git & Repo Inspection**     | Verify origin, branch, history                                       | ✅ Completed | Clean repo, origin set to https://github.com/gopipeddinti1986-oss/CROWND.git           |
+| **Project Scaffolding**       | Next.js 15, TS strict, Tailwind, Prettier, ESLint                    | ✅ Completed | Scaffolded, configured, initial commit ee98fa7 pushed to GitHub                          |
+| **Design System**             | Tokens, themes (light/dark), components, typography                  | ✅ Completed | Tokens, theme provider/switcher, UI primitives, 9 passing tests, Next.js build verified |
+| **Supabase Foundation**       | Client configs, schema, migrations, RLS, seed                        | 🔄 In Progress | Database schema, RLS policies, clients, and types in progress                           |
+| **Supabase Env Setup**        | .env.example, .gitignore, guidance                                   | ✅ Completed | Template created; awaiting user local .env.local values                                 |
+| **Authentication Foundation** | Sign up, sign in, password reset, protected routes, roles            | ⏳ Queued    | Client/server sessions and role-aware layout                                            |
+| **Public Marketing Website**  | Home, How it works, Creators, Campaigns, Pricing, FAQ, Guides, Legal | ⏳ Queued    | Editorial, clean, informative content without lorem ipsum                               |
+| **Testing & Quality Gates**   | Vitest, TypeScript, Lint, Axe a11y, responsive                       | 🔄 In Progress | 9 tests passing, 0 lint warnings, 0 type errors, production build verified               |
 
 ---
 
 ## 4. Tests Performed & Results
 
 - Repository inspection: Remote verified (`origin` -> `https://github.com/gopipeddinti1986-oss/CROWND.git`, branch `main`).
-- Additional unit and lint tests pending completion of initial dependency installation.
+- Unit & Component tests (`npm test`): 9/9 passed (smoke test, theme switching & storage, button, input with password toggle, alert with accessible dismiss, badge).
+- Type check (`npm run typecheck`): 0 errors.
+- Lint (`npm run lint`): 0 warnings, 0 errors.
+- Formatting (`npm run format:check`): Clean.
+- Production build (`npm run build`): Compiled successfully (Next.js 15.5.29 App Router).
 
 ---
 
