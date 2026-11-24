@@ -11,36 +11,42 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 
 ## 2. Current Status
 
-- **Current Stage:** Stage A: Foundation & Core Platform
-- **Phase:** Task 4 — Supabase Integration & Live Connectivity Verified; Ready for Authentication
-- **Latest Commit:** f4723a6 (feat: implement Supabase database foundation, schema migrations, and typed clients)
+- **Current Stage:** Stage A: Foundation & Core Platform (COMPLETED)
+- **Phase:** Stage A Final Verification & Quality Gates Passed
+- **Latest Commit on origin/main:** 0913c6c (feat: implement complete authentication system, session management, and role-based dashboard)
 
 ---
 
 ## 3. Task Tracker
 
-| Task / Gate                   | Scope                                                                | Status         | Details                                                                                  |
-| ----------------------------- | -------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------- |
-| **Git & Repo Inspection**     | Verify origin, branch, history                                       | ✅ Completed   | Clean repo, origin set to https://github.com/gopipeddinti1986-oss/CROWND.git             |
-| **Project Scaffolding**       | Next.js 15, TS strict, Tailwind, Prettier, ESLint                    | ✅ Completed   | Scaffolded, configured, initial commit ee98fa7 pushed to GitHub                          |
-| **Design System**             | Tokens, themes (light/dark), components, typography                  | ✅ Completed   | Tokens, theme provider/switcher, UI primitives, 9 passing tests, Next.js build verified  |
-| **Supabase Foundation**       | Client configs, schema, migrations, RLS, seed                        | ✅ Completed   | Database schema, RLS policies, clients, and types pushed; 13 tables confirmed in live DB |
-| **Supabase Env Setup**        | .env.example, .gitignore, guidance                                   | ✅ Completed   | .env.local configured, verified ignored by Git, live connection verified with 0 errors   |
-| **Authentication Foundation** | Sign up, sign in, password reset, protected routes, roles            | 🔄 In Progress | Client/server sessions and role-aware layout                                             |
-| **Public Marketing Website**  | Home, How it works, Creators, Campaigns, Pricing, FAQ, Guides, Legal | ⏳ Queued      | Editorial, clean, informative content without lorem ipsum                                |
-| **Testing & Quality Gates**   | Vitest, TypeScript, Lint, Axe a11y, responsive                       | 🔄 In Progress | 13 tests passing, 0 lint warnings, 0 type errors, production build verified (Next.js 15) |
+| Task / Gate                   | Scope                                                                | Status       | Details                                                                                           |
+| ----------------------------- | -------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------- |
+| **Git & Repo Inspection**     | Verify origin, branch, history                                       | ✅ Completed | Clean repo, origin set to https://github.com/gopipeddinti1986-oss/CROWND.git                      |
+| **Project Scaffolding**       | Next.js 15, TS strict, Tailwind, Prettier, ESLint                    | ✅ Completed | Scaffolded, configured, initial commit ee98fa7 pushed to GitHub                                   |
+| **Design System**             | Tokens, themes (light/dark), components, typography                  | ✅ Completed | Tokens, theme switcher, UI primitives, 43 passing tests, Next.js build verified                  |
+| **Supabase Foundation**       | Client configs, schema, migrations, RLS, seed                        | ✅ Completed | Database schema, RLS policies, clients, and types pushed; 13 tables confirmed in live DB          |
+| **Supabase Env Setup**        | .env.example, .gitignore, guidance                                   | ✅ Completed | .env.local configured, verified ignored by Git, live connection verified with 0 errors            |
+| **Authentication Foundation** | Sign up, sign in, password reset, protected routes, roles            | ✅ Completed | Server-enforced role clamping, session middleware, protected dashboard, password recovery         |
+| **Public Marketing Website**  | Home, How it works, Creators, Campaigns, Pricing, FAQ, Guides, Legal | ✅ Completed | 14 responsive public routes, zero lorem ipsum, real guides, SEO metadata, sitemap & robots        |
+| **Testing & Quality Gates**   | Vitest, TypeScript, Lint, Axe a11y, responsive                       | ✅ Completed | 43/43 tests passing, 0 lint warnings, 0 type errors, production build verified (27 routes static) |
 
 ---
 
 ## 4. Tests Performed & Results
 
-- Repository inspection: Remote verified (`origin` -> `https://github.com/gopipeddinti1986-oss/CROWND.git`, branch `main`).
-- Unit & Component tests (`npm test`): 13/13 passed (smoke test, theme switching & storage, button, input with password toggle, alert with accessible dismiss, badge, URL normalization & env helpers).
-- Live Database Connectivity: Verified both anon client and service role client connected with 0 errors. All 13 tables (`profiles`, `brands`, `creators`, `campaigns`, `campaign_applications`, `products`, `referral_links`, `clicks`, `orders`, `rewards`, `transactions`, `audit_logs`, `risk_flags`) verified existing in live Supabase instance.
-- Type check (`npm run typecheck`): 0 errors.
-- Lint (`npm run lint`): 0 warnings, 0 errors.
-- Formatting (`npm run format:check`): Clean.
-- Production build (`npm run build`): Compiled successfully (Next.js 15.5.29 App Router with session middleware).
+- **Unit & Component Tests (`npm test`):** 43/43 passed across 7 test suites:
+  - `smoke.test.ts`: Test environment sanity check.
+  - `env.test.ts`: Supabase URL normalization, protocol repair, and env helpers.
+  - `validation.test.ts`: Input validators, password complexity, role clamping (blocking self-assigned admin), and open-redirect protection.
+  - `theme.test.tsx`: Dual-theme cycling, document attribute synchronization, and persistence.
+  - `components.test.tsx`: Buttons, input password reveal toggle, alerts with dismiss action, badge variants.
+  - `public-pages.test.tsx`: Rendering of all marketing pages, interactive creator search/filtering, campaign search.
+  - `a11y-responsive.test.tsx`: Accessible SkipLink, landmark navigation, mobile toggle with ARIA, accessible form labels, radiogroup role selection, and modal dialog semantics.
+- **Live Database Connectivity:** Both anon and service role clients connected with 0 errors. All 13 tables verified existing in live Supabase instance.
+- **Type check (`npm run typecheck`):** 0 errors.
+- **Lint (`npm run lint`):** 0 errors, 0 warnings.
+- **Formatting (`npm run format:check`):** Clean, 100% compliant with Prettier.
+- **Production build (`npm run build`):** Compiled successfully in 9.2s. Prerendered 27 routes (Home, About, Campaigns, Creators, FAQ, For Brands, For Creators, Pricing, Privacy, Terms, Guides Hub + 3 articles, Login, Signup, Forgot-Password, Reset-Password, Verify-Email, Robots.txt, Sitemap.xml, Dashboard, Auth Callback).
 
 ---
 
@@ -59,6 +65,7 @@ CROWND is a performance-based creator-commerce platform connecting small & local
    - Server-first role enforcement via Supabase SSR and Server Actions.
    - Database tables guarded by Row Level Security (RLS) with explicit tenant/owner policies.
    - Public credentials strictly segregated from `SUPABASE_SERVICE_ROLE_KEY`.
+   - Dedicated `src/lib/content/guides.ts` module to adhere to Next.js 15 page export restrictions.
 
 ---
 
@@ -73,16 +80,14 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 
 ---
 
-## 7. Known Issues / Blockers
-
-- None at this stage. Awaiting local `.env.local` credentials from user for live Supabase connectivity.
+## 7. Known Issues & Limitations (Stage A Scope)
+- **Supabase Email Delivery:** Email sending relies on Supabase's SMTP/Auth settings. In local development or default Supabase tier without custom SMTP, rate limits apply to password resets and confirmation emails.
+- **Stage B Boundaries Preserved:** Campaign creation workflows, attribution tracking engine, checkout webhooks, rewards disbursement, and admin moderation are intentionally queued for Stage B.
 
 ---
 
-## 8. Next Steps
-
-1. Finalize dependency installation and setup test harness (`src/test/setup.ts`).
-2. Implement CSS variables in `src/app/globals.css` and theme provider/switcher.
-3. Build complete design system UI primitives (Button, Input, Select, Table, Dialog, Dropdown, Badge, Alert, Toast, Skeleton, EmptyState).
-4. Implement Supabase database schema and migrations (`users`, `profiles`, `brands`, `creators`, `campaigns`, `applications`, `products`, `referral_links`, `clicks`, `orders`, `rewards`, `transactions`, `audit_logs`, `risk_flags`).
-5. Provide user guidance for `.env.local` and await credentials while building public pages and auth components.
+## 8. Next Steps (Stage B Transition)
+1. Implement Stage B campaign creation and management workflows for Brands.
+2. Implement creator referral link generation and coupon attribution engine.
+3. Integrate e-commerce webhooks (order placement, carrier delivery confirmation, return window trigger).
+4. Implement creator payout disbursements and commission escrow settlements.

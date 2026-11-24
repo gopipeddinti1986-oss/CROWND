@@ -49,7 +49,7 @@ function LoginForm() {
     <div className="w-full max-w-md space-y-6 rounded border border-border bg-surface p-6 shadow-hairline sm:p-8">
       {/* Header */}
       <div className="space-y-1.5 text-center">
-        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-surface-subtle text-accent mb-2">
+        <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-surface-subtle text-accent">
           <Lock className="h-5 w-5" aria-hidden="true" />
         </div>
         <h1 className="font-serif text-2xl font-bold tracking-tight text-foreground">
@@ -104,16 +104,25 @@ function LoginForm() {
           />
         </div>
 
-        <Button type="submit" variant="primary" size="lg" className="w-full mt-2" isLoading={isPending}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          className="mt-2 w-full"
+          isLoading={isPending}
+        >
           Sign In
-          <ArrowRight className="h-4 w-4 ml-1.5" aria-hidden="true" />
+          <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden="true" />
         </Button>
       </form>
 
       {/* Footer */}
       <div className="border-t border-border pt-4 text-center text-xs text-muted">
         Don&apos;t have an account yet?{" "}
-        <Link href="/signup" className="font-semibold text-accent hover:underline focus-visible:outline-accent">
+        <Link
+          href="/signup"
+          className="font-semibold text-accent hover:underline focus-visible:outline-accent"
+        >
           Create an account
         </Link>
       </div>
@@ -126,7 +135,7 @@ export default function LoginPage() {
     <div className="mx-auto flex min-h-[calc(100vh-14rem)] max-w-content items-center justify-center px-4 py-12 sm:px-6">
       <Suspense
         fallback={
-          <div className="w-full max-w-md p-8 text-center flex flex-col items-center justify-center">
+          <div className="flex w-full max-w-md flex-col items-center justify-center p-8 text-center">
             <LoadingSpinner size="md" />
           </div>
         }
