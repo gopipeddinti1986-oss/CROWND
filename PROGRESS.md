@@ -83,6 +83,60 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 
 ---
 
+## 4.2 Stage B2: Complete Campaign Ecosystem, Collaborations, Referral Tracking & Attribution (COMPLETED)
+
+### Implemented Capabilities
+
+1. **Campaign Ecosystem & Database Architecture (B2.0):**
+   - Migration `supabase/migrations/20260103000000_stage_b2_campaign_ecosystem.sql` appended to `supabase/combined_migrations.sql`.
+   - Comprehensive tables with full RLS: `campaigns`, `campaign_applications`, `collaborations`, `referral_links`, `clicks`, `orders`, `rewards`, `notifications`.
+   - Strict TypeScript definitions in `src/lib/types/database.ts`.
+
+2. **Brand Campaign Management (B2.1):**
+   - 7-step Campaign Wizard (`src/components/campaigns/campaign-wizard.tsx`): Basics, Product, Creators, Deliverables, Budget, Schedule, Preview & Publish.
+   - Lifecycle Status Transitions (`src/components/campaigns/campaign-status-control.tsx`): Draft -> Active -> Paused -> Active -> Completed -> Archived.
+   - Server Actions: `createCampaignAction`, `updateCampaignAction`, `updateCampaignStatusAction`, `getBrandCampaignsAction`, `deleteCampaignDraftAction`.
+   - Brand Pages: `/dashboard/campaigns`, `/dashboard/campaigns/new`, `/dashboard/campaigns/[id]`, `/dashboard/campaigns/[id]/edit`.
+
+3. **Creator Discovery & Applications (B2.2):**
+   - Creator Discovery Hub (`/dashboard/discover`): Browse active campaigns with audience size eligibility badge.
+   - Application Modal (`src/components/campaigns/campaign-application-modal.tsx`): Creator pitch, proposed content plan, portfolio link submission.
+   - Brand Application Review (`src/components/campaigns/brand-application-card.tsx`): Review creator stats, accept with automatic referral link generation or decline with notes.
+   - Pages: `/dashboard/campaigns/[id]/applications`, `/dashboard/applications`, `/campaigns/[id]` (public/creator detail view).
+
+4. **Creator Collaboration Workspace (B2.3):**
+   - Workspace (`/dashboard/collaborations`): Status-grouped collaborations for both brands and creators.
+   - Collaboration Card (`src/components/collaborations/collaboration-card.tsx`): Live tracking link copying, deliverables progress, creator content submission modal (URL, caption, notes), brand review modal (approve or request revision).
+   - Navigation: Role-aware navigation tabs in `src/app/dashboard/layout.tsx`.
+
+5. **Privacy-Preserving Referral Tracking Engine (B2.4):**
+   - Route Handler (`/r/[code]`): 302 redirection, open-redirect prevention, bot traffic filtering (`Googlebot`, `Bingbot`, `HeadlessChrome`, scrapers).
+   - Cookies: 30-day attribution cookie (`crownd_attribution`) and 1-year anonymous visitor cookie (`crownd_vid`).
+   - Privacy: SHA-256 salted IP hashing (`hashIp`) prevents storing raw IP addresses.
+
+6. **Conversion Attribution & Financial Precision Engine (B2.5 & B2.6):**
+   - Attribution Resolution (`src/lib/attribution/engine.ts`): Last-Click attribution within a 30-day window.
+   - Minor Currency Precision: `calculateDecimalCommission` uses integer-cent arithmetic to eliminate IEEE-754 floating-point rounding errors.
+   - Order Processing (`src/lib/conversions/actions.ts`): `recordOrderConversionAction` with idempotency, referral link stats updates, reward ledger creation, and transaction logs.
+   - Conversion Modal (`src/components/campaigns/record-conversion-modal.tsx`): Brand manual conversion logging.
+   - Rewards Ledger (`src/lib/rewards/actions.ts`): Creator earnings breakdown (paid, eligible, pending return window), maturity checks, and brand payout disbursement.
+
+7. **Performance Analytics & Notifications (B2.7 & B2.8):**
+   - Analytics Engine (`src/lib/analytics/actions.ts`): Aggregates clicks, conversions, CR%, revenue, commission, and ROAS.
+   - Dashboard (`/dashboard/analytics`): Role-aware dashboard with performance KPI cards, top creator links, and verified orders ledger.
+   - Notifications System (`src/lib/notifications/actions.ts` & `src/components/notifications/notification-bell.tsx`): Interactive bell dropdown with unread badge counter and mark-as-read actions.
+   - Public Directory (`/campaigns`): Live query of active database campaigns with search and category filtering.
+
+### Stage B2 Verification Results
+
+- **Unit & Component Tests (`npm test`):** 13 test files passed, 110/110 tests passed (100%).
+- **TypeScript (`npm run typecheck`):** 0 errors.
+- **ESLint (`npm run lint`):** 0 errors, 0 warnings.
+- **Formatting (`npm run format:check`):** 100% compliant with Prettier.
+- **Production build (`npm run build`):** 35 static & dynamic routes compiled successfully.
+
+---
+
 ## 5. Architectural Decisions
 
 1. **Next.js App Router (15.x):** Clean server-side rendering, layout nesting, and strict boundary separation between server actions and interactive client controls.
@@ -99,12 +153,14 @@ CROWND is a performance-based creator-commerce platform connecting small & local
    - Database tables guarded by Row Level Security (RLS) with explicit tenant/owner policies.
    - Public credentials strictly segregated from `SUPABASE_SERVICE_ROLE_KEY`.
    - File uploads validated server-side for MIME type, file size limit (5MB avatar / 10MB logo), and authenticated user folder isolation.
+   - Attribution cookies signed and scoped; destination URLs strictly sanitized; visitor IPs hashed via HMAC-SHA256.
+   - Commission and financial ledgers calculated using integer-cent rounding to guarantee zero floating point errors.
 
 ---
 
 ## 6. Database Migration Guidance
 
-The full database schema for Stage A and Stage B1 is compiled in:
+The full database schema for Stage A, Stage B1, and Stage B2 is compiled in:
 
 - `supabase/combined_migrations.sql`
 
@@ -117,13 +173,12 @@ To apply to your Supabase project:
 
 ---
 
-## 7. Next Steps (Stage B Transition)
+## 7. Next Steps (Stage C Transition)
 
-1. **Stage B2 — Brand Campaign Workflows:**
-   - Campaign creation wizard (title, description, commission rate, return window, requirements, budget).
-   - Campaign management table (draft, active, paused, archived).
-   - Public campaign discovery page connected to active campaigns.
-2. **Stage B3 — Creator Collaboration & Referral Links:**
-   - Creator campaign discovery & application workflow.
-   - Brand application review (approve/reject).
-   - Unique referral link & coupon generator.
+1. **Stage C1 — Stripe Connect & Marketplace Escrow Engine:**
+   - Onboarding brand payout methods and creator payout accounts.
+   - Escrow lock on campaign budgets and automated payouts upon return window clearance.
+2. **Stage C2 — Third-Party E-Commerce Store Integrations:**
+   - Shopify, WooCommerce, and custom webhooks for automated order syncing.
+3. **Stage C3 — Fraud Detection & Advanced Attribution:**
+   - IP clustering, velocity anomaly detection, self-referral prevention.

@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { getActiveCampaignsAction } from "@/lib/campaigns/actions";
 
-// Sample active campaigns for Stage A demonstration
+// Sample active campaigns fallback for Stage preview demonstration
 const SAMPLE_CAMPAIGNS = [
   {
     id: "camp-1",
@@ -80,9 +81,41 @@ const SAMPLE_CAMPAIGNS = [
 export default function CampaignsListingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNiche, setSelectedNiche] = useState("all");
+  const [liveCampaigns, setLiveCampaigns] = useState<any[]>([]);
 
-  const filteredCampaigns = useMemo(() => {
-    return SAMPLE_CAMPAIGNS.filter((camp) => {
+  useEffect(() => {
+    async function loadCampaigns() {
+      try {
+        const res = await getActiveCampaignsAction();
+        if (res.success && res.campaigns && res.campaigns.length > 0) {
+          const mapped = res.campaigns.map((c: any) => ({
+            id: c.id,
+            brand: c.brands?.company_name || "Verified Brand",
+            title: c.title,
+            niche: c.category || "General",
+            commission:
+              c.commission_type === "percentage"
+                ? `${c.commission_rate}% per sale`
+                : `$${c.commission_rate} flat per sale`,
+            commissionType: c.commission_type,
+            returnWindow: c.return_window_days || 14,
+            budget: `$${Number(c.budget || 0).toLocaleString()}`,
+            description: c.description,
+            requirements: c.deliverable_guidelines || "Authentic content alignment.",
+            isLive: true,
+          }));
+          setLiveCampaigns(mapped);
+        }
+      } catch (e) {
+        console.error("Failed to load live campaigns", e);
+      }
+    }
+    loadCampaigns();
+  }, []);
+
+  const displayedList = useMemo(() => {
+    const source = liveCampaigns.length > 0 ? liveCampaigns : SAMPLE_CAMPAIGNS;
+    return source.filter((camp) => {
       const matchesSearch =
         camp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         camp.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -93,7 +126,7 @@ export default function CampaignsListingPage() {
 
       return matchesSearch && matchesNiche;
     });
-  }, [searchQuery, selectedNiche]);
+  }, [liveCampaigns, searchQuery, selectedNiche]);
 
   return (
     <div className="w-full">
@@ -116,12 +149,14 @@ export default function CampaignsListingPage() {
         </div>
       </section>
 
-      {/* Demo Notice Banner */}
+      {/* Demo / Live Notice Banner */}
       <div className="border-b border-border bg-surface-subtle py-2.5">
         <div className="mx-auto flex max-w-content items-center justify-between px-4 text-xs text-muted sm:px-6">
           <span>
-            <strong className="text-foreground">Notice:</strong> Displaying curated sample campaigns
-            for Stage A demonstration.
+            <strong className="text-foreground">Status:</strong>{" "}
+            {liveCampaigns.length > 0
+              ? `Displaying ${liveCampaigns.length} live verified brand campaigns.`
+              : "Displaying curated sample campaigns for preview demonstration."}
           </span>
           <span className="hidden text-[11px] text-muted-subtle sm:inline">
             Verified post-delivery return clearance active.
@@ -156,13 +191,13 @@ export default function CampaignsListingPage() {
           </div>
 
           <div className="flex items-center justify-between text-xs text-muted">
-            <span>Showing {filteredCampaigns.length} campaigns</span>
+            <span>Showing {displayedList.length} campaigns</span>
             <span>All commissions unlock after customer return window</span>
           </div>
 
           {/* Cards List */}
           <div className="space-y-4">
-            {filteredCampaigns.map((camp) => (
+            {displayedList.map((camp) => (
               <div
                 key={camp.id}
                 className="hover:border-accent/40 rounded border border-border bg-surface p-6 shadow-hairline transition-colors"
@@ -177,6 +212,11 @@ export default function CampaignsListingPage() {
                       <Badge variant="neutral" size="sm">
                         {camp.niche}
                       </Badge>
+                      {camp.isLive && (
+                        <Badge variant="success" size="sm">
+                          Live
+                        </Badge>
+                      )}
                     </div>
                     <h3 className="font-serif text-lg font-bold text-foreground">{camp.title}</h3>
                   </div>
@@ -203,9 +243,9 @@ export default function CampaignsListingPage() {
                       <strong className="text-foreground">{camp.returnWindow} Days</strong>
                     </div>
 
-                    <Link href="/signup">
+                    <Link href={camp.isLive ? `/campaigns/${camp.id}` : "/signup"}>
                       <Button variant="primary" size="md">
-                        Apply to Campaign
+                        {camp.isLive ? "View & Apply" : "Apply to Campaign"}
                         <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
                       </Button>
                     </Link>

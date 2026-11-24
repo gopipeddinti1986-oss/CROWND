@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { getAuthenticatedUser, logoutAction } from "@/lib/auth/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { LogOut, UserCircle, LayoutDashboard, User, ArrowRight } from "lucide-react";
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import { LogOut, UserCircle, LayoutDashboard, User, ArrowRight, BarChart3 } from "lucide-react";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, profile } = await getAuthenticatedUser();
@@ -61,17 +62,69 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <LayoutDashboard className="h-3.5 w-3.5 text-muted" />
                 Overview
               </Link>
+              {profile.role === "brand" ? (
+                <>
+                  <Link
+                    href="/dashboard/campaigns"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    Campaigns
+                  </Link>
+                  <Link
+                    href="/dashboard/collaborations"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    Collaborations
+                  </Link>
+                  <Link
+                    href="/dashboard/analytics"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    <BarChart3 className="h-3.5 w-3.5 text-muted" />
+                    Analytics
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/dashboard/discover"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    Discover
+                  </Link>
+                  <Link
+                    href="/dashboard/applications"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    Applications
+                  </Link>
+                  <Link
+                    href="/dashboard/collaborations"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    Collaborations
+                  </Link>
+                  <Link
+                    href="/dashboard/analytics"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
+                  >
+                    <BarChart3 className="h-3.5 w-3.5 text-muted" />
+                    Analytics
+                  </Link>
+                </>
+              )}
               <Link
                 href="/dashboard/profile"
                 className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
               >
                 <User className="h-3.5 w-3.5 text-muted" />
-                Profile &amp; Settings
+                Profile
               </Link>
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <NotificationBell />
             <Link
               href="/dashboard/profile"
               className="inline-flex items-center gap-1 rounded p-1.5 text-muted hover:text-foreground sm:hidden"
