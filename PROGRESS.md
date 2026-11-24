@@ -23,7 +23,7 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 | ----------------------------- | -------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------- |
 | **Git & Repo Inspection**     | Verify origin, branch, history                                       | ✅ Completed | Clean repo, origin set to https://github.com/gopipeddinti1986-oss/CROWND.git                      |
 | **Project Scaffolding**       | Next.js 15, TS strict, Tailwind, Prettier, ESLint                    | ✅ Completed | Scaffolded, configured, initial commit ee98fa7 pushed to GitHub                                   |
-| **Design System**             | Tokens, themes (light/dark), components, typography                  | ✅ Completed | Tokens, theme switcher, UI primitives, 43 passing tests, Next.js build verified                  |
+| **Design System**             | Tokens, themes (light/dark), components, typography                  | ✅ Completed | Tokens, theme switcher, UI primitives, 43 passing tests, Next.js build verified                   |
 | **Supabase Foundation**       | Client configs, schema, migrations, RLS, seed                        | ✅ Completed | Database schema, RLS policies, clients, and types pushed; 13 tables confirmed in live DB          |
 | **Supabase Env Setup**        | .env.example, .gitignore, guidance                                   | ✅ Completed | .env.local configured, verified ignored by Git, live connection verified with 0 errors            |
 | **Authentication Foundation** | Sign up, sign in, password reset, protected routes, roles            | ✅ Completed | Server-enforced role clamping, session middleware, protected dashboard, password recovery         |
@@ -81,12 +81,14 @@ CROWND is a performance-based creator-commerce platform connecting small & local
 ---
 
 ## 7. Known Issues & Limitations (Stage A Scope)
+
 - **Supabase Email Delivery:** Email sending relies on Supabase's SMTP/Auth settings. In local development or default Supabase tier without custom SMTP, rate limits apply to password resets and confirmation emails.
 - **Stage B Boundaries Preserved:** Campaign creation workflows, attribution tracking engine, checkout webhooks, rewards disbursement, and admin moderation are intentionally queued for Stage B.
 
 ---
 
 ## 8. Next Steps (Stage B Transition)
+
 1. Implement Stage B campaign creation and management workflows for Brands.
 2. Implement creator referral link generation and coupon attribution engine.
 3. Integrate e-commerce webhooks (order placement, carrier delivery confirmation, return window trigger).
